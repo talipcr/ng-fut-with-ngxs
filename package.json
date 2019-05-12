@@ -29,7 +29,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "json": "json-server --watch db.json"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.10.0",
