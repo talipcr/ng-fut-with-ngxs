@@ -1,0 +1,58 @@
+{
+  "team": [
+    {
+      "id": 1,
+      "name": "team Sfeir",
+      "players": [
+        {
+          "id": 1,
+          "playerId": 1,
+          "name": "Talip Cesur",
+          "imageBase64": "",
+          "rating": 89,
+          "position": "MC",
+          "spec": {
+            "vit_value": 89,
+            "dri_value": 89,
+            "tir_value": 89,
+            "def_value": 89,
+            "pas_value": 89,
+            "phy_value": 89
+          }
+        },
+        {
+          "id": 2,
+          "playerId": 2,
+          "name": "Zac Meddah",
+          "imageBase64": "",
+          "rating": 92,
+          "position": "MG",
+          "spec": {
+            "vit_value": 92,
+            "dri_value": 92,
+            "tir_value": 92,
+            "def_value": 92,
+            "pas_value": 92,
+            "phy_value": 92
+          }
+        },
+        {
+          "id": 3,
+          "playerId": 3,
+          "name": "Mika Albiero",
+          "imageBase64": "",
+          "rating": 92,
+          "position": "AD",
+          "spec": {
+            "vit_value": 92,
+            "dri_value": 92,
+            "tir_value": 92,
+            "def_value": 92,
+            "pas_value": 92,
+            "phy_value": 92
+          }
+        }
+      ]
+    }
+  ]
+}
