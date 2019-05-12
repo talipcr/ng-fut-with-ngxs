@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
 import { Observable } from 'rxjs/Observable';
 import { FutState } from './fut.state';
-import { Team } from './models/fut.models';
+import { Team, Player } from './models/fut.models';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { SetCurrentPlayer } from './fut.action';
 
 @Component({
   selector: 'app-root',
@@ -40,5 +41,9 @@ export class AppComponent implements OnInit {
     //   console.log(state);
     //   input.value = '';
     // });
+  }
+
+  setCurrentPlayer(player: Player){
+    this.store.dispatch(new SetCurrentPlayer(player));
   }
 }

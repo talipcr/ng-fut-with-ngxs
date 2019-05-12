@@ -1,17 +1,19 @@
 import { State, Action, StateContext, Selector, Store } from '@ngxs/store';
 import { ApiService } from './api.service';
-import { Team } from './models/fut.models';
-import { GetAllTeams, AddPlayer } from './fut.action';
+import { Team, Player } from './models/fut.models';
+import { GetAllTeams, AddPlayer, SetCurrentPlayer } from './fut.action';
 import { tap } from 'rxjs/operators';
 
 export interface FutStateModel {
   teams: Team[];
+  currentPlayer: Player;
 }
 
 @State<FutStateModel>({
   name: 'futStateModel',
   defaults: {
-    teams:[]
+    teams:[],
+    currentPlayer: null
   }
 })
 
@@ -22,18 +24,23 @@ export class FutState {
     return state.teams;
   }
 
+  @Selector()
+  static currentPlayer(state: FutStateModel){
+    return state.currentPlayer;
+  }
+
   constructor(private service: ApiService) {}
 
   ngxsOnInit(ctx: StateContext<FutStateModel>) {
     ctx.dispatch(new GetAllTeams()); //get all the teams when appli start or refresh
-    const player = {
-      playerId: 5,
-      name: "TEST",
-      imageBase64: "TEST",
-      rating: 99,
-      position: "TEST",
-      spec : null
-    }
+    // const player = {
+    //   playerId: 5,
+    //   name: "TEST",
+    //   imageBase64: "TEST",
+    //   rating: 99,
+    //   position: "TEST",
+    //   spec : null
+    // }
     // ctx.dispatch(new AddPlayer(1, player)).pipe(tap(() => {
     //   ctx.dispatch(new GetAllTeams()) //get all the teams when appli start or refresh
     // }));
@@ -61,6 +68,14 @@ export class FutState {
     ];
     ctx.patchState(result);
     this.service.addPlayer(action.teamId, result.teams[0])
+  }
+
+  @Action(SetCurrentPlayer)
+  setCurrentPlayer(ctx: StateContext<FutStateModel>, action: SetCurrentPlayer){
+    const state = ctx.getState();
+    const result = state;
+    result.currentPlayer = action.player;
+    ctx.patchState(result);
   }
 
 }
