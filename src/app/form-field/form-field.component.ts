@@ -7,7 +7,7 @@ import {
   FormControl,
   Validators
 } from '@angular/forms';
-import { Player } from '../models/fut.models';
+import { Player, listOfSpec } from '../models/fut.models';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs/Observable';
 
@@ -20,11 +20,16 @@ export class FormFieldComponent implements OnInit {
   @Select(FutState.currentPlayer)
   currentPlayer$: Observable<Player>;
 
+  @Select(FutState.lastPlayerId)
+  lastPlayerId$: Observable<number>;
+
   myPlayer: FormGroup;
-  player: Player = null;
+  player: Player;
 
   file: any;
   fileToString: string;
+
+  currentId: number;
 
   constructor(private _store: Store) {}
 
@@ -79,26 +84,38 @@ export class FormFieldComponent implements OnInit {
       )
     });
   }
+
   addPlayer() {
+    console.log(this.myPlayer);
+
     if (this.myPlayer.status === 'VALID') {
-      console.log(this.myPlayer);
+      this.lastPlayerId$.subscribe(data => {
+        if (data) {
+          this.currentId = data;
+        }
+      });
 
-      console.log(this.player);
-
+      this.player = new Player();
+      this.player.id = this.currentId + 1;
+      this.player.playerId = this.player.id;
       this.player.name = this.myPlayer.controls['name'].value;
-      this.player.position = this.myPlayer.value['position'].value;
-      this.player.rating = this.myPlayer.value['position'].value;
-      this.player.imageBase64 = this.myPlayer.value['file'].value;
-      this.player.spec.vit_value = this.myPlayer.value['vit'].value;
-      this.player.spec.dri_value = this.myPlayer.value['dri'].value;
-      this.player.spec.tir_value = this.myPlayer.value['tir'].value;
-      this.player.spec.def_value = this.myPlayer.value['def'].value;
-      this.player.spec.pas_value = this.myPlayer.value['pas'].value;
-      this.player.spec.phy_value = this.myPlayer.value['phy'].value;
+      this.player.position = this.myPlayer.controls['position'].value;
+      this.player.rating = this.myPlayer.controls['rating'].value;
+      if (this.myPlayer.controls['file'].value) {
+        this.player.imageBase64 = this.myPlayer.controls['file'].value;
+      } else {
+        this.player.imageBase64 = '';
+      }
 
-      console.log(this.player);
+      this.player.spec = new listOfSpec();
+      this.player.spec.vit_value = this.myPlayer.controls['vit'].value;
+      this.player.spec.dri_value = this.myPlayer.controls['dri'].value;
+      this.player.spec.tir_value = this.myPlayer.controls['tir'].value;
+      this.player.spec.def_value = this.myPlayer.controls['def'].value;
+      this.player.spec.pas_value = this.myPlayer.controls['pas'].value;
+      this.player.spec.phy_value = this.myPlayer.controls['phy'].value;
 
-      // this._store.dispatch(new AddPlayer());
+      this._store.dispatch(new AddPlayer(1, this.player));
     }
   }
   deletePlayer() {

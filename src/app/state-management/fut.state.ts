@@ -26,6 +26,11 @@ export class FutState {
     return state.currentPlayer;
   }
 
+  @Selector()
+  static lastPlayerId(state: FutStateModel) {
+    return state.teams[0].players.length;
+  }
+
   constructor(private service: ApiService) {}
 
   ngxsOnInit(ctx: StateContext<FutStateModel>) {
@@ -59,9 +64,9 @@ export class FutState {
     const state = ctx.getState();
     const result = state;
     console.log('result', result);
-    // result.teams[0].players = [...result.teams[0].players, action.player];
-    // ctx.patchState(result);
-    // this.service.addPlayer(action.teamId, result.teams[0]);
+    result.teams[0].players = [...result.teams[0].players, action.player];
+    ctx.patchState(result);
+    return this.service.addPlayer(action.teamId, result.teams[0]);
   }
 
   @Action(SetCurrentPlayer)
@@ -71,4 +76,8 @@ export class FutState {
     result.currentPlayer = action.player;
     ctx.patchState(result);
   }
+
+  // @Action(DeletePlayer)
+  // deletePlayer(ctx: StateContext<FutStateModel>, action: AddPlayer) {
+  // }
 }

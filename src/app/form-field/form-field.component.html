@@ -2,7 +2,14 @@
   <form [formGroup]="myPlayer">
     <div class="d-flex flex-wrap">
       <img
+        *ngIf="!player?.imageBase64"
         src="https://raw.githubusercontent.com/encharm/Font-Awesome-SVG-PNG/master/black/png/128/user.png"
+        class="rounded mx-auto d-block"
+        alt="..."
+      />
+      <img
+        *ngIf="player?.imageBase64"
+        src="player.imageBase64"
         class="rounded mx-auto d-block"
         alt="..."
       />
