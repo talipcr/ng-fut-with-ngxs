@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
 import { Observable } from 'rxjs/Observable';
-import { FutState } from './fut.state';
+import { FutState } from './state-management/fut.state';
 import { Team, Player } from './models/fut.models';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { SetCurrentPlayer } from './fut.action';
+import { SetCurrentPlayer } from './state-management/fut.action';
 
 @Component({
   selector: 'app-root',
@@ -22,16 +22,16 @@ export class AppComponent implements OnInit {
 
   constructor(private store: Store, private formBuilder: FormBuilder) {}
 
-  ngOnInit(){
+  ngOnInit() {
     this.teams$.subscribe((data: Team) => {
-      if(data){
+      if (data) {
         this.team = data;
         console.log(this.team);
       }
     });
 
     this.futForm = this.formBuilder.group({
-      futTeam : [''],
+      futTeam: [''],
       futPlayer: ['']
     });
   }
@@ -43,7 +43,7 @@ export class AppComponent implements OnInit {
     // });
   }
 
-  setCurrentPlayer(player: Player){
+  setCurrentPlayer(player: Player) {
     this.store.dispatch(new SetCurrentPlayer(player));
   }
 }

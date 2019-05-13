@@ -1,6 +1,6 @@
 import { State, Action, StateContext } from '@ngxs/store';
-import { ApiService } from './api.service';
 import { tap } from 'rxjs/operators';
+import { ApiService } from './../api.service';
 
 export class ADDTODO {
   payload: TodoItem;
@@ -27,7 +27,10 @@ export class TodosState {
   constructor(private service: ApiService) {}
 
   @Action(ADDTODO)
-  addTodo({ getState, setState }: StateContext<TodosStateModel>, { payload }: ADDTODO) {
+  addTodo(
+    { getState, setState }: StateContext<TodosStateModel>,
+    { payload }: ADDTODO
+  ) {
     return this.service.someApiCall().pipe(
       tap(() => {
         const state = getState();

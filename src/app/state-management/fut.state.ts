@@ -1,8 +1,7 @@
+import { Team, Player } from './../models/fut.models';
 import { State, Action, StateContext, Selector, Store } from '@ngxs/store';
-import { ApiService } from './api.service';
-import { Team, Player } from './models/fut.models';
+import { ApiService } from './../api.service';
 import { GetAllTeams, AddPlayer, SetCurrentPlayer } from './fut.action';
-import { tap } from 'rxjs/operators';
 
 export interface FutStateModel {
   teams: Team[];
@@ -12,20 +11,18 @@ export interface FutStateModel {
 @State<FutStateModel>({
   name: 'futStateModel',
   defaults: {
-    teams:[],
+    teams: [],
     currentPlayer: null
   }
 })
-
 export class FutState {
-
   @Selector()
-  static getTeam(state: FutStateModel){
+  static getTeam(state: FutStateModel) {
     return state.teams;
   }
 
   @Selector()
-  static currentPlayer(state: FutStateModel){
+  static currentPlayer(state: FutStateModel) {
     return state.currentPlayer;
   }
 
@@ -47,35 +44,31 @@ export class FutState {
   }
 
   @Action(GetAllTeams)
-  getAllTeams(ctx: StateContext<FutStateModel>){
+  getAllTeams(ctx: StateContext<FutStateModel>) {
     return this.service.getAllTeams().subscribe((data: Team) => {
-      if(data){
+      if (data) {
         ctx.patchState({
           teams: Object.assign([], data)
-        })
+        });
       }
     });
   }
 
   @Action(AddPlayer)
-  addPlayer(ctx: StateContext<FutStateModel>, action: AddPlayer){
+  addPlayer(ctx: StateContext<FutStateModel>, action: AddPlayer) {
     const state = ctx.getState();
     const result = state;
     console.log('result', result);
-    result.teams[0].players = [
-      ...result.teams[0].players,
-      action.player
-    ];
-    ctx.patchState(result);
-    this.service.addPlayer(action.teamId, result.teams[0])
+    // result.teams[0].players = [...result.teams[0].players, action.player];
+    // ctx.patchState(result);
+    // this.service.addPlayer(action.teamId, result.teams[0]);
   }
 
   @Action(SetCurrentPlayer)
-  setCurrentPlayer(ctx: StateContext<FutStateModel>, action: SetCurrentPlayer){
+  setCurrentPlayer(ctx: StateContext<FutStateModel>, action: SetCurrentPlayer) {
     const state = ctx.getState();
     const result = state;
     result.currentPlayer = action.player;
     ctx.patchState(result);
   }
-
 }
