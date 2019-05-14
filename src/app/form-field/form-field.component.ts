@@ -1,4 +1,4 @@
-import { AddPlayer } from './../state-management/fut.action';
+import { AddPlayer, DeletePlayer } from './../state-management/fut.action';
 import { FutState } from './../state-management/fut.state';
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import {
@@ -119,7 +119,7 @@ export class FormFieldComponent implements OnInit {
     }
   }
   deletePlayer() {
-    console.log(this.myPlayer);
+    this._store.dispatch(new DeletePlayer(1, this.player.playerId));
   }
 
   onFileChange(event) {

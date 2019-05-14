@@ -1,7 +1,14 @@
 import { Team, Player } from './../models/fut.models';
 import { State, Action, StateContext, Selector, Store } from '@ngxs/store';
 import { ApiService } from './../api.service';
-import { GetAllTeams, AddPlayer, SetCurrentPlayer } from './fut.action';
+import {
+  GetAllTeams,
+  AddPlayer,
+  SetCurrentPlayer,
+  DeletePlayer
+} from './fut.action';
+import { takeLast, tap, map, finalize, catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 export interface FutStateModel {
   teams: Team[];
@@ -62,22 +69,40 @@ export class FutState {
   @Action(AddPlayer)
   addPlayer(ctx: StateContext<FutStateModel>, action: AddPlayer) {
     const state = ctx.getState();
-    const result = state;
-    console.log('result', result);
-    result.teams[0].players = [...result.teams[0].players, action.player];
-    ctx.patchState(result);
-    return this.service.addPlayer(action.teamId, result.teams[0]);
+    state.teams[0].players = [...state.teams[0].players, action.player];
+    ctx.patchState(state);
+
+    // Add in json
+    return this.service.addPlayer(action.teamId, state.teams[0]);
   }
 
   @Action(SetCurrentPlayer)
   setCurrentPlayer(ctx: StateContext<FutStateModel>, action: SetCurrentPlayer) {
     const state = ctx.getState();
-    const result = state;
-    result.currentPlayer = action.player;
-    ctx.patchState(result);
+    state.currentPlayer = action.player;
+    ctx.patchState(state);
   }
 
-  // @Action(DeletePlayer)
-  // deletePlayer(ctx: StateContext<FutStateModel>, action: AddPlayer) {
-  // }
+  @Action(DeletePlayer)
+  deletePlayer(ctx: StateContext<FutStateModel>, action: DeletePlayer) {
+    const state = ctx.getState();
+    state.teams[0].players = [
+      ...state.teams[0].players.filter(p => p.playerId !== action.playerId)
+    ];
+    ctx.patchState(state);
+
+    return this.service
+      .addPlayer(action.teamId, state.teams[0])
+      .pipe(
+        map(data => {
+          console.log(data);
+        }),
+        catchError(error => of(console.log('error'))),
+        finalize(() => ctx.dispatch(new GetAllTeams()))
+      )
+      .subscribe(() => {
+        state.currentPlayer = null;
+        ctx.patchState(state);
+      });
+  }
 }

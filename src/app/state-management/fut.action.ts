@@ -14,3 +14,8 @@ export class SetCurrentPlayer {
   static type = 'Set current player edited';
   constructor(public player: Player) {}
 }
+
+export class DeletePlayer {
+  static readonly type = 'Delete a player';
+  constructor(public teamId: number, public playerId: number) {}
+}

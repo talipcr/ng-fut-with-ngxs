@@ -45,13 +45,6 @@ export class AppComponent implements OnInit {
     });
   }
 
-  addTodo(input) {
-    // this.store.dispatch(new ADDTODO(input.value)).subscribe(state => {
-    //   console.log(state);
-    //   input.value = '';
-    // });
-  }
-
   onChange(e) {
     console.log(e);
   }
