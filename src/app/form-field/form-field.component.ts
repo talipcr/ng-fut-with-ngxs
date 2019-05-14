@@ -20,8 +20,8 @@ export class FormFieldComponent implements OnInit {
   @Select(FutState.currentPlayer)
   currentPlayer$: Observable<Player>;
 
-  @Select(FutState.lastPlayerId)
-  lastPlayerId$: Observable<number>;
+  @Select(FutState.numberOfPlayers)
+  numberOfPlayers$: Observable<number>;
 
   myPlayer: FormGroup;
   player: Player;
@@ -89,7 +89,7 @@ export class FormFieldComponent implements OnInit {
     console.log(this.myPlayer);
 
     if (this.myPlayer.status === 'VALID') {
-      this.lastPlayerId$.subscribe(data => {
+      this.numberOfPlayers$.subscribe(data => {
         if (data) {
           this.currentId = data;
         }

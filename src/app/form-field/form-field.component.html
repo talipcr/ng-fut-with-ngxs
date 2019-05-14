@@ -9,8 +9,8 @@
       />
       <img
         *ngIf="player?.imageBase64"
-        src="player.imageBase64"
-        class="rounded mx-auto d-block"
+        src="data:image/png;base64,{{ player.imageBase64 }}"
+        class="rounded mx-auto d-block w-25 h-25"
         alt="..."
       />
       <button mat-raised-button color="primary" (click)="fileInput.click()">

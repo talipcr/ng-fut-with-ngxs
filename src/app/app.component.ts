@@ -17,8 +17,13 @@ export class AppComponent implements OnInit {
   @Select(FutState.getTeam)
   teams$: Observable<Team>;
 
+  @Select(FutState.numberOfPlayers)
+  numberOfPlayers$: Observable<number>;
+
   team: Team;
   futForm: FormGroup;
+
+  numberOfPlayer: number;
 
   constructor(private store: Store, private formBuilder: FormBuilder) {}
 
@@ -28,6 +33,10 @@ export class AppComponent implements OnInit {
         this.team = data;
         console.log(this.team);
       }
+
+      this.numberOfPlayers$.subscribe(data => {
+        this.numberOfPlayer = data;
+      });
     });
 
     this.futForm = this.formBuilder.group({
@@ -41,6 +50,10 @@ export class AppComponent implements OnInit {
     //   console.log(state);
     //   input.value = '';
     // });
+  }
+
+  onChange(e) {
+    console.log(e);
   }
 
   setCurrentPlayer(player: Player) {

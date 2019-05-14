@@ -27,7 +27,7 @@ export class FutState {
   }
 
   @Selector()
-  static lastPlayerId(state: FutStateModel) {
+  static numberOfPlayers(state: FutStateModel) {
     return state.teams[0].players.length;
   }
 
