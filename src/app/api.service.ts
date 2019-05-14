@@ -13,7 +13,7 @@ export class ApiService {
     return of([]).pipe(tap(() => console.log('log from service')));
   }
 
-  public getAllTeams(){
+  public getAllTeams() {
     return this.http.get('http://localhost:3000/team').pipe(
       catchError((err: any) => {
         console.log(err);
@@ -22,7 +22,7 @@ export class ApiService {
     );
   }
 
-  public addPlayer(teamId: number, team: Team){
+  public addPlayer(teamId: number, team: Team) {
     return this.http.patch(`http://localhost:3000/team/${teamId}`, team).pipe(
       catchError((err: any) => {
         console.log(err);
@@ -30,6 +30,4 @@ export class ApiService {
       })
     );
   }
-
-
 }
