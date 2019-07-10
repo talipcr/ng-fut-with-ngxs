@@ -114,8 +114,21 @@
         </mat-form-field>
       </div>
       <div class="mx-auto">
-        <button mat-raised-button class="m-3" (click)="addPlayer()">
+        <button
+          *ngIf="!player"
+          mat-raised-button
+          class="m-3"
+          (click)="addPlayer()"
+        >
           Ajouter
+        </button>
+        <button
+          *ngIf="player"
+          mat-raised-button
+          class="m-3"
+          (click)="modifyPlayer()"
+        >
+          Modifier
         </button>
         <button
           mat-raised-button

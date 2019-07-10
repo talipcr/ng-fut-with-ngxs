@@ -49,6 +49,10 @@ export class AppComponent implements OnInit {
     console.log(e);
   }
 
+  newPlayer() {
+    console.log('new');
+  }
+
   setCurrentPlayer(player: Player) {
     this.store.dispatch(new SetCurrentPlayer(player));
   }

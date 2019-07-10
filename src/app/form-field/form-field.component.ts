@@ -118,6 +118,11 @@ export class FormFieldComponent implements OnInit {
       this._store.dispatch(new AddPlayer(1, this.player));
     }
   }
+
+  modifyPlayer() {
+    console.log("ok it's done");
+  }
+
   deletePlayer() {
     this._store.dispatch(new DeletePlayer(1, this.player.playerId));
   }

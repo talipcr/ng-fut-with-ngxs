@@ -4,7 +4,7 @@
       <form [formGroup]="futForm">
         <mat-form-field class="w-100">
           <mat-select [formControl]="futForm.controls['futTeam']">
-            <mat-option *ngFor="let t of team" [value]="t">{{
+            <mat-option *ngFor="let t of team" [value]="t" selected>{{
               t.name
             }}</mat-option>
           </mat-select>
@@ -12,6 +12,9 @@
         </mat-form-field>
         <mat-form-field class="w-100">
           <mat-select [formControl]="futForm.controls['futPlayer']">
+            <mat-option (click)="newPlayer()">
+              <mat-icon>person_add</mat-icon> Nouveau joueur</mat-option
+            >
             <mat-option
               *ngFor="let player of futForm.controls['futTeam'].value.players"
               [value]="player"
