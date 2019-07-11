@@ -12,7 +12,7 @@ import {
   Validators
 } from '@angular/forms';
 import { Player, listOfSpec } from '../models/fut.models';
-import { Select, Store } from '@ngxs/store';
+import { Select, Store, Actions, ofActionSuccessful, ofActionDispatched } from '@ngxs/store';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
@@ -35,7 +35,9 @@ export class FormFieldComponent implements OnInit {
 
   currentId: number;
 
-  constructor(private _store: Store) {}
+  constructor(private _store: Store,
+              private action: Actions
+  ) {}
 
   ngOnInit() {
     this.currentPlayer$.subscribe(data => {
@@ -45,6 +47,11 @@ export class FormFieldComponent implements OnInit {
 
       this.initForm();
     });
+
+    this.action.pipe(ofActionSuccessful(DeletePlayer)).subscribe(() => {
+      this.player = null;
+      this.initForm();
+    })
   }
 
   initForm() {
@@ -133,17 +140,17 @@ export class FormFieldComponent implements OnInit {
         }
       });
 
-      this.player = new Player();
-      this.player.id = this.currentId + 1;
+      this.player.id = this.currentId;
       this.player.playerId = this.player.id;
       this.player.name = this.myPlayer.controls['name'].value;
       this.player.position = this.myPlayer.controls['position'].value;
       this.player.rating = this.myPlayer.controls['rating'].value;
       if (this.myPlayer.controls['file'].value) {
         this.player.imageBase64 = this.myPlayer.controls['file'].value;
-      } else {
-        this.player.imageBase64 = '';
       }
+      // } else {
+      //   this.player.imageBase64 = this.player;
+      // }
 
       this.player.spec = new listOfSpec();
       this.player.spec.vit_value = this.myPlayer.controls['vit'].value;

@@ -89,7 +89,9 @@ export class FutState {
   @Action(ModifyPlayer)
   modifyPlayer(ctx: StateContext<FutStateModel>, action: AddPlayer) {
     const state = ctx.getState();
-    state.teams[0].players = [...state.teams[0].players, action.player];
+    // state.teams[0].players = [...state.teams[0].players, action.player];
+    // let playerIndex = state.teams[0].players.indexOf()
+    state.teams[0].players.forEach(player => {if (player.id == action.player.id) player = action.player})
     ctx.patchState(state);
 
     // Add in json

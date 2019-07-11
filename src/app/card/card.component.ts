@@ -1,8 +1,9 @@
 import { Observable } from 'rxjs/Observable';
 import { FutState } from './../state-management/fut.state';
-import { Select } from '@ngxs/store';
+import { Select, Actions, ofActionSuccessful } from '@ngxs/store';
 import { Component, OnInit } from '@angular/core';
 import { Player } from '../models/fut.models';
+import { DeletePlayer } from '../state-management/fut.action';
 
 @Component({
   selector: 'app-card',
@@ -19,7 +20,7 @@ export class CardComponent implements OnInit {
 
   urlImage: string = '';
 
-  constructor() {}
+  constructor(private action: Actions) {}
 
   ngOnInit() {
     this.currentPlayer$.subscribe(data => {
@@ -36,6 +37,10 @@ export class CardComponent implements OnInit {
         }, 1800);
       }
     });
+
+    this.action.pipe(ofActionSuccessful(DeletePlayer)).subscribe(() => {
+      this.player = null;
+    })
   }
 
   onClick(e) {
