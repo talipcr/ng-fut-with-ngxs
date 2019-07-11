@@ -22,9 +22,10 @@ import {
 } from '@angular/material';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CardComponent } from './card/card.component';
 
 @NgModule({
-  declarations: [AppComponent, FormFieldComponent],
+  declarations: [AppComponent, FormFieldComponent, CardComponent],
   imports: [
     BrowserModule,
     NgxsModule.forRoot([FutState]),

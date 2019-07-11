@@ -1,4 +1,8 @@
-import { AddPlayer, DeletePlayer } from './../state-management/fut.action';
+import {
+  AddPlayer,
+  DeletePlayer,
+  ModifyPlayer
+} from './../state-management/fut.action';
 import { FutState } from './../state-management/fut.state';
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import {
@@ -14,7 +18,7 @@ import { Observable } from 'rxjs/Observable';
 @Component({
   selector: 'app-form-field',
   templateUrl: './form-field.component.html',
-  styleUrls: ['./form-field.component.css']
+  styleUrls: ['./form-field.component.scss']
 })
 export class FormFieldComponent implements OnInit {
   @Select(FutState.currentPlayer)
@@ -120,7 +124,37 @@ export class FormFieldComponent implements OnInit {
   }
 
   modifyPlayer() {
-    console.log("ok it's done");
+    console.log(this.myPlayer);
+
+    if (this.myPlayer.status === 'VALID') {
+      this.numberOfPlayers$.subscribe(data => {
+        if (data) {
+          this.currentId = data;
+        }
+      });
+
+      this.player = new Player();
+      this.player.id = this.currentId + 1;
+      this.player.playerId = this.player.id;
+      this.player.name = this.myPlayer.controls['name'].value;
+      this.player.position = this.myPlayer.controls['position'].value;
+      this.player.rating = this.myPlayer.controls['rating'].value;
+      if (this.myPlayer.controls['file'].value) {
+        this.player.imageBase64 = this.myPlayer.controls['file'].value;
+      } else {
+        this.player.imageBase64 = '';
+      }
+
+      this.player.spec = new listOfSpec();
+      this.player.spec.vit_value = this.myPlayer.controls['vit'].value;
+      this.player.spec.dri_value = this.myPlayer.controls['dri'].value;
+      this.player.spec.tir_value = this.myPlayer.controls['tir'].value;
+      this.player.spec.def_value = this.myPlayer.controls['def'].value;
+      this.player.spec.pas_value = this.myPlayer.controls['pas'].value;
+      this.player.spec.phy_value = this.myPlayer.controls['phy'].value;
+
+      this._store.dispatch(new ModifyPlayer(1, this.player));
+    }
   }
 
   deletePlayer() {
