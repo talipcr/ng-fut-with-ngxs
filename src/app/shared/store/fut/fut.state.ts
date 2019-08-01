@@ -1,28 +1,16 @@
-import { Team, Player } from './../models/fut.models';
-import { State, Action, StateContext, Selector, Store } from '@ngxs/store';
-import {
-  patch,
-  append,
-  removeItem,
-  insertItem,
-  updateItem
-} from '@ngxs/store/operators';
-
-import { ApiService } from './../api.service';
+import { State, StateContext, Action } from '@ngxs/store';
+import { patch } from '@ngxs/store/operators';
+import { map, catchError, finalize } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { ApiService } from 'src/app/core/services/api.service';
+import { FutStateModel, TeamModel } from './fut.model';
 import {
   GetAllTeams,
   AddPlayer,
+  ModifyPlayer,
   SetCurrentPlayer,
-  DeletePlayer,
-  ModifyPlayer
+  DeletePlayer
 } from './fut.action';
-import { map, finalize, catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
-
-export interface FutStateModel {
-  teams: Team;
-  currentPlayer: Player;
-}
 
 @State<FutStateModel>({
   name: 'futStateModel',
@@ -32,42 +20,15 @@ export interface FutStateModel {
   }
 })
 export class FutState {
-  @Selector()
-  static getTeam(state: FutStateModel) {
-    return state.teams;
-  }
-
-  @Selector()
-  static currentPlayer(state: FutStateModel) {
-    return state.currentPlayer;
-  }
-
-  @Selector()
-  static numberOfPlayers(state: FutStateModel) {
-    return state.teams[0].players.length;
-  }
-
   constructor(private service: ApiService) {}
 
   ngxsOnInit(ctx: StateContext<FutStateModel>) {
-    ctx.dispatch(new GetAllTeams()); //get all the teams when appli start or refresh
-
-    // const player = {
-    //   playerId: 5,
-    //   name: "TEST",
-    //   imageBase64: "TEST",
-    //   rating: 99,
-    //   position: "TEST",
-    //   spec : null
-    // }
-    // ctx.dispatch(new AddPlayer(1, player)).pipe(tap(() => {
-    //   ctx.dispatch(new GetAllTeams()) //get all the teams when appli start or refresh
-    // }));
+    ctx.dispatch(new GetAllTeams());
   }
 
   @Action(GetAllTeams)
   getAllTeams(ctx: StateContext<FutStateModel>) {
-    return this.service.getAllTeams().subscribe((data: Team) => {
+    return this.service.getAllTeams().subscribe((data: TeamModel) => {
       if (data) {
         ctx.patchState({
           teams: Object.assign([], data)
@@ -89,9 +50,9 @@ export class FutState {
   @Action(ModifyPlayer)
   modifyPlayer(ctx: StateContext<FutStateModel>, action: AddPlayer) {
     const state = ctx.getState();
-    // state.teams[0].players = [...state.teams[0].players, action.player];
-    // let playerIndex = state.teams[0].players.indexOf()
-    state.teams[0].players.forEach(player => {if (player.id == action.player.id) player = action.player})
+    state.teams[0].players.forEach(player => {
+      if (player.id == action.player.id) player = action.player;
+    });
     ctx.patchState(state);
 
     // Add in json
@@ -100,12 +61,6 @@ export class FutState {
 
   @Action(SetCurrentPlayer)
   setCurrentPlayer(ctx: StateContext<FutStateModel>, action: SetCurrentPlayer) {
-    // old code
-    // const state = ctx.getState();
-    // state.currentPlayer = action.player;
-    // ctx.patchState(state);
-
-    // new code
     ctx.setState(
       patch({
         currentPlayer: action.player

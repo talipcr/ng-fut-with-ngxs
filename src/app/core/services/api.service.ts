@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { of } from 'rxjs/observable/of';
-import { tap, catchError } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { throwError } from 'rxjs';
-import { Player, Team } from './models/fut.models';
+import { tap, catchError } from 'rxjs/operators';
+import { of } from 'rxjs/observable/of';
+import { TeamModel } from 'src/app/shared/store';
 
 @Injectable()
 export class ApiService {
@@ -22,7 +22,7 @@ export class ApiService {
     );
   }
 
-  public addPlayer(teamId: number, team: Team) {
+  public addPlayer(teamId: number, team: TeamModel) {
     return this.http.patch(`http://localhost:3000/team/${teamId}`, team).pipe(
       catchError((err: any) => {
         console.log(err);

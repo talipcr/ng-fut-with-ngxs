@@ -1,19 +1,15 @@
-import {
-  AddPlayer,
-  DeletePlayer,
-  ModifyPlayer
-} from './../state-management/fut.action';
-import { FutState } from './../state-management/fut.state';
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  FormControl,
-  Validators
-} from '@angular/forms';
-import { Player, listOfSpec } from '../models/fut.models';
-import { Select, Store, Actions, ofActionSuccessful, ofActionDispatched } from '@ngxs/store';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Select, Store, Actions, ofActionSuccessful } from '@ngxs/store';
 import { Observable } from 'rxjs/Observable';
+import {
+  FutSelector,
+  PlayerModel,
+  DeletePlayer,
+  playerListOfSpec,
+  AddPlayer,
+  ModifyPlayer
+} from '../../store';
 
 @Component({
   selector: 'app-form-field',
@@ -21,23 +17,21 @@ import { Observable } from 'rxjs/Observable';
   styleUrls: ['./form-field.component.scss']
 })
 export class FormFieldComponent implements OnInit {
-  @Select(FutState.currentPlayer)
-  currentPlayer$: Observable<Player>;
+  @Select(FutSelector.currentPlayer)
+  currentPlayer$: Observable<PlayerModel>;
 
-  @Select(FutState.numberOfPlayers)
+  @Select(FutSelector.numberOfPlayers)
   numberOfPlayers$: Observable<number>;
 
   myPlayer: FormGroup;
-  player: Player;
+  player: PlayerModel;
 
   file: any;
   fileToString: string;
 
   currentId: number;
 
-  constructor(private _store: Store,
-              private action: Actions
-  ) {}
+  constructor(private _store: Store, private action: Actions) {}
 
   ngOnInit() {
     this.currentPlayer$.subscribe(data => {
@@ -51,7 +45,7 @@ export class FormFieldComponent implements OnInit {
     this.action.pipe(ofActionSuccessful(DeletePlayer)).subscribe(() => {
       this.player = null;
       this.initForm();
-    })
+    });
   }
 
   initForm() {
@@ -106,7 +100,7 @@ export class FormFieldComponent implements OnInit {
         }
       });
 
-      this.player = new Player();
+      this.player = new PlayerModel();
       this.player.id = this.currentId + 1;
       this.player.playerId = this.player.id;
       this.player.name = this.myPlayer.controls['name'].value;
@@ -118,7 +112,7 @@ export class FormFieldComponent implements OnInit {
         this.player.imageBase64 = '';
       }
 
-      this.player.spec = new listOfSpec();
+      this.player.spec = new playerListOfSpec();
       this.player.spec.vit_value = this.myPlayer.controls['vit'].value;
       this.player.spec.dri_value = this.myPlayer.controls['dri'].value;
       this.player.spec.tir_value = this.myPlayer.controls['tir'].value;
@@ -152,7 +146,7 @@ export class FormFieldComponent implements OnInit {
       //   this.player.imageBase64 = this.player;
       // }
 
-      this.player.spec = new listOfSpec();
+      this.player.spec = new playerListOfSpec();
       this.player.spec.vit_value = this.myPlayer.controls['vit'].value;
       this.player.spec.dri_value = this.myPlayer.controls['dri'].value;
       this.player.spec.tir_value = this.myPlayer.controls['tir'].value;

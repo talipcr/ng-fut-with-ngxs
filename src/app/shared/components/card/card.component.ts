@@ -1,9 +1,7 @@
-import { Observable } from 'rxjs/Observable';
-import { FutState } from './../state-management/fut.state';
-import { Select, Actions, ofActionSuccessful } from '@ngxs/store';
 import { Component, OnInit } from '@angular/core';
-import { Player } from '../models/fut.models';
-import { DeletePlayer } from '../state-management/fut.action';
+import { Select, Actions, ofActionSuccessful } from '@ngxs/store';
+import { Observable } from 'rxjs/Observable';
+import { DeletePlayer, PlayerModel, FutSelector } from '../../store';
 
 @Component({
   selector: 'app-card',
@@ -13,10 +11,10 @@ import { DeletePlayer } from '../state-management/fut.action';
 export class CardComponent implements OnInit {
   bool: boolean;
 
-  @Select(FutState.currentPlayer)
-  currentPlayer$: Observable<Player>;
+  @Select(FutSelector.currentPlayer)
+  currentPlayer$: Observable<PlayerModel>;
 
-  player: Player = null;
+  player: PlayerModel = null;
 
   urlImage: string = '';
 
@@ -40,7 +38,7 @@ export class CardComponent implements OnInit {
 
     this.action.pipe(ofActionSuccessful(DeletePlayer)).subscribe(() => {
       this.player = null;
-    })
+    });
   }
 
   onClick(e) {

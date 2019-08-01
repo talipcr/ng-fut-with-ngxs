@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { Store, Select } from '@ngxs/store';
 import { Observable } from 'rxjs/Observable';
-import { FutState } from './state-management/fut.state';
-import { Team, Player } from './models/fut.models';
-import { FormGroup, FormBuilder } from '@angular/forms';
-import { SetCurrentPlayer } from './state-management/fut.action';
+import {
+  FutSelector,
+  TeamModel,
+  PlayerModel,
+  SetCurrentPlayer
+} from './shared/store';
 
 @Component({
   selector: 'app-root',
@@ -14,13 +17,13 @@ import { SetCurrentPlayer } from './state-management/fut.action';
 export class AppComponent implements OnInit {
   title = 'app';
 
-  @Select(FutState.getTeam)
-  teams$: Observable<Team>;
+  @Select(FutSelector.getTeam)
+  teams$: Observable<TeamModel>;
 
-  @Select(FutState.numberOfPlayers)
+  @Select(FutSelector.numberOfPlayers)
   numberOfPlayers$: Observable<number>;
 
-  team: Team;
+  team: TeamModel;
   futForm: FormGroup;
 
   numberOfPlayer: number;
@@ -28,7 +31,7 @@ export class AppComponent implements OnInit {
   constructor(private store: Store, private formBuilder: FormBuilder) {}
 
   ngOnInit() {
-    this.teams$.subscribe((data: Team) => {
+    this.teams$.subscribe((data: TeamModel) => {
       if (data) {
         this.team = data;
         console.log(this.team);
@@ -53,7 +56,7 @@ export class AppComponent implements OnInit {
     console.log('new');
   }
 
-  setCurrentPlayer(player: Player) {
+  setCurrentPlayer(player: PlayerModel) {
     this.store.dispatch(new SetCurrentPlayer(player));
   }
 }

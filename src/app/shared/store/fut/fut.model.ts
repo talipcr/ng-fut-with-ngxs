@@ -1,20 +1,25 @@
-export interface Team {
-  teamId: number;
-  name: string;
-  players?: Array<Player>;
+export interface FutStateModel {
+  teams: TeamModel;
+  currentPlayer: PlayerModel;
 }
 
-export class Player {
+export interface TeamModel {
+  teamId: number;
+  name: string;
+  players?: Array<PlayerModel>;
+}
+
+export class PlayerModel {
   id: number;
   playerId: number;
   name: string;
   imageBase64: string;
   rating: number;
   position: string;
-  spec: listOfSpec;
+  spec: playerListOfSpec;
 }
 
-export class listOfSpec {
+export class playerListOfSpec {
   vit_value: number;
   dri_value: number;
   tir_value: number;
