@@ -1,62 +1,62 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Store, Select } from '@ngxs/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import {
-  FutSelector,
-  TeamModel,
-  PlayerModel,
-  SetCurrentPlayer
+	FutSelector,
+	TeamModel,
+	PlayerModel,
+	SetCurrentPlayer,
 } from './shared/store';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+	selector: 'app-root',
+	templateUrl: './app.component.html',
+	styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  title = 'app';
+	title = 'app';
 
-  @Select(FutSelector.getTeam)
-  teams$: Observable<TeamModel>;
+	@Select(FutSelector.getTeam)
+	teams$: Observable<TeamModel>;
 
-  @Select(FutSelector.numberOfPlayers)
-  numberOfPlayers$: Observable<number>;
+	@Select(FutSelector.numberOfPlayers)
+	numberOfPlayers$: Observable<number>;
 
-  team: TeamModel;
-  futForm: FormGroup;
+	team: TeamModel;
+	futForm: FormGroup;
 
-  numberOfPlayer: number;
+	numberOfPlayer: number;
 
-  constructor(private store: Store, private formBuilder: FormBuilder) {}
+	constructor(private store: Store, private formBuilder: FormBuilder) {}
 
-  ngOnInit() {
-    this.teams$.subscribe((data: TeamModel) => {
-      if (data) {
-        this.team = data;
-        console.log(this.team);
-      }
+	ngOnInit() {
+		this.teams$.subscribe((data: TeamModel) => {
+			if (data) {
+				this.team = data;
+				console.log(this.team);
+			}
 
-      this.numberOfPlayers$.subscribe(data => {
-        this.numberOfPlayer = data;
-      });
-    });
+			this.numberOfPlayers$.subscribe((data) => {
+				this.numberOfPlayer = data;
+			});
+		});
 
-    this.futForm = this.formBuilder.group({
-      futTeam: [''],
-      futPlayer: ['']
-    });
-  }
+		this.futForm = this.formBuilder.group({
+			futTeam: [''],
+			futPlayer: [''],
+		});
+	}
 
-  onChange(e) {
-    console.log(e);
-  }
+	onChange(e) {
+		console.log(e);
+	}
 
-  newPlayer() {
-    console.log('new');
-  }
+	newPlayer() {
+		console.log('new');
+	}
 
-  setCurrentPlayer(player: PlayerModel) {
-    this.store.dispatch(new SetCurrentPlayer(player));
-  }
+	setCurrentPlayer(player: PlayerModel) {
+		this.store.dispatch(new SetCurrentPlayer(player));
+	}
 }
